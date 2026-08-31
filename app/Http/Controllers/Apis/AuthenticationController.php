@@ -13,6 +13,7 @@ class AuthenticationController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'group_id' => 'required|exists:groups,id',
             'name' => 'required|min:5',
             'email' => 'required|email|unique:users',
             'password' => 'required',
@@ -21,6 +22,7 @@ class AuthenticationController extends Controller
             return $this->json_response('error', 'Validation failed', $validator->errors(), 422);
         }
         $user = new User();
+        $user->group_id = $request->group_id;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
