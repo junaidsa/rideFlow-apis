@@ -7,6 +7,7 @@ use App\Models\Car;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class CarsController extends Controller
@@ -30,10 +31,17 @@ class CarsController extends Controller
                 'model' => 'required',
                 'color' => 'required',
                 'plate_number' => 'required|unique:cars,plate_number',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             ]);
 
             if ($validator->fails()) {
                 return $this->json_response('error', 'Validation failed', $validator->errors(), 422);
+            }
+
+            $imagePath = null;
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('cars', 'public');
             }
 
             $car = Car::create([
@@ -42,6 +50,7 @@ class CarsController extends Controller
                 'model' => $request->model,
                 'color' => $request->color,
                 'plate_number' => $request->plate_number,
+                'image' => $imagePath,
                 'created_by' => Auth::id(),
             ]);
 
@@ -76,7 +85,8 @@ class CarsController extends Controller
                 'name' => 'sometimes|min:2',
                 'model' => 'nullable',
                 'color' => 'nullable',
-                'plate_number' => 'nullable',
+                'plate_number' => 'nullable|unique:cars,plate_number,'.$id,
+                'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             ]);
             if ($validator->fails()) {
                 return $this->json_response('error', 'Validation failed', $validator->errors(), 422);
@@ -86,6 +96,16 @@ class CarsController extends Controller
             $car->model = $request->model ?? $car->model;
             $car->color = $request->color ?? $car->color;
             $car->plate_number = $request->plate_number ?? $car->plate_number;
+
+            if ($request->hasFile('image')) {
+
+                if ($car->image && Storage::disk('public')->exists($car->image)) {
+                    Storage::disk('public')->delete($car->image);
+                }
+
+                $car->image = $request->file('image')->store('cars', 'public');
+            }
+
             $car->save();
 
             return $this->json_response('success', 'Car Updated', 'Car updated successfully', 200, $car->toArray());
@@ -100,6 +120,12 @@ class CarsController extends Controller
             $car = Car::findOrFail($id);
             $car->deleted_by = Auth::id();
             $car->save();
+
+            // Delete image
+            if ($car->image && Storage::disk('public')->exists($car->image)) {
+                Storage::disk('public')->delete($car->image);
+            }
+
             $car->delete();
             return $this->json_response('success','Car Deleted','Car deleted successfully',200);
         } catch (ModelNotFoundException $e) {
