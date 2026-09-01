@@ -39,8 +39,19 @@ class Car extends Model
         'model',
         'color',
         'plate_number',
+        'image',
         'created_by',
         'updated_by',
         'deleted_by',
     ];
+
+    /**
+     * Image URL Accessor
+     */
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
 }
