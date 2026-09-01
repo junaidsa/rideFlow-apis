@@ -30,6 +30,7 @@ class User extends Authenticatable
     protected $fillable = [
         'group_id',
         'name',
+        'username',
         'email',
         'password',
     ];
