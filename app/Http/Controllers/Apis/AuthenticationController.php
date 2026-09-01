@@ -15,6 +15,7 @@ class AuthenticationController extends Controller
         $validator = Validator::make($request->all(), [
             'group_id' => 'required|exists:groups,id',
             'name' => 'required|min:5',
+            'username' => 'required|min:3|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required',
         ]);
@@ -24,6 +25,7 @@ class AuthenticationController extends Controller
         $user = new User();
         $user->group_id = $request->group_id;
         $user->name = $request->name;
+        $user->username = $request->username;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();
@@ -34,19 +36,19 @@ class AuthenticationController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'username' => 'required',
             'password' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->json_response('error', 'Validation failed', $validator->errors(), 422);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
             $user = User::find($user = Auth::id());
             $token = $user->createToken('token')->plainTextToken;
             return $this->json_response('success', 'Login', 'Login Account Successfully', 200, $user->toArray(), $token);
         } else {
-                return $this->json_response('error', 'Validation failed', 'Either Email/Password is incorrect', 401);
+                return $this->json_response('error', 'Validation failed', 'Either Username/Password is incorrect', 401);
         }
     }
 }
