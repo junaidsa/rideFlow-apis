@@ -13,8 +13,8 @@ return new class extends Migration
     {
         // Add group_id to users table
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('group_id')->nullable()->index()->after('id');
-            $table->foreign('group_id')->references('id')->on('groups')->nullOnDelete();
+            $table->unsignedBigInteger('group_id')->default(1)->index()->after('id');
+            $table->foreign('group_id')->references('id')->on('groups')->restrictOnDelete();
         });
     }
 
