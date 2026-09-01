@@ -3,6 +3,7 @@
 use App\Http\Controllers\Apis\AuthenticationController;
 use App\Http\Controllers\Apis\CarsController;
 use App\Http\Controllers\Apis\DriversController;
+use App\Http\Controllers\Apis\RidesController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register',[AuthenticationController::class,'register']);
@@ -20,6 +21,12 @@ Route::group(['middleware' =>['auth:sanctum']], function () {
     Route::get('/drivers/{id}',[DriversController::class,'show']);
     Route::put('/drivers/{id}',[DriversController::class,'update']);
     Route::delete('/drivers/{id}',[DriversController::class,'destroy']);
+
+    Route::get('/rides',[RidesController::class,'index']);
+    Route::post('/rides',[RidesController::class,'store']);
+    Route::get('/rides/{id}',[RidesController::class,'show']);
+    Route::put('/rides/{id}',[RidesController::class,'update']);
+    Route::delete('/rides/{id}',[RidesController::class,'destroy']);
 });
 
 // Route::get('/user', function (Request $request) {
