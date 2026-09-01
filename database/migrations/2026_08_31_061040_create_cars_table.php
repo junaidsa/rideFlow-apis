@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('group_id')->nullable()->index();
+            $table->unsignedBigInteger('group_id')->default(1)->index();
             $table->string('name', 250);
             $table->string('model', 100)->nullable();
             $table->string('color', 100)->nullable();
