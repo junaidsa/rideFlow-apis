@@ -35,6 +35,9 @@ class Account extends Model
 
     protected $fillable = [
         'group_id',
+        'car_id',
+        'car_name',
+        'commission',
         'name',
         'phone',
         'father_phone',

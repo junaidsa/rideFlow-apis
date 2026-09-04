@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Apis;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\Car;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,8 @@ class DriversController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                'car_id' => 'required|exists:cars,id',
+                'commission' => 'nullable|numeric|between:0,100',
                 'name' => 'required|min:2',
                 'phone' => 'nullable',
                 'father_phone' => 'nullable',
@@ -38,8 +41,13 @@ class DriversController extends Controller
                 return $this->json_response('error', 'Validation failed', $validator->errors(), 422);
             }
 
+            $car = Car::find($request->car_id);
+
             $account = Account::create([
                 'group_id' => Auth::user()->group_id,
+                'car_id' => $request->car_id,
+                'car_name' => $car->name,
+                'commission' => $request->commission ?? 0,
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'father_phone' => $request->father_phone,
@@ -77,6 +85,8 @@ class DriversController extends Controller
             }
 
             $validator = Validator::make($request->all(), [
+                'car_id' => 'sometimes|exists:cars,id',
+                'commission' => 'nullable|numeric|between:0,100',
                 'name' => 'sometimes|min:2',
                 'phone' => 'nullable',
                 'father_phone' => 'nullable',
@@ -88,6 +98,12 @@ class DriversController extends Controller
                 return $this->json_response('error', 'Validation failed', $validator->errors(), 422);
             }
 
+            if ($request->has('car_id')) {
+                $car = Car::find($request->car_id);
+                $account->car_id = $request->car_id;
+                $account->car_name = $car->name;
+            }
+            $account->commission = $request->commission ?? $account->commission;
             $account->name = $request->name ?? $account->name;
             $account->phone = $request->phone ?? $account->phone;
             $account->father_phone = $request->father_phone ?? $account->father_phone;
