@@ -124,14 +124,14 @@ class TransactionsController extends Controller
     public function destroy($id)
     {
         try {
-            $transaction = Transaction::findOrFail($id);
-            $transaction->deleted_by = Auth::id();
-            $transaction->save();
+            $transaction = Transaction::find($id);
+            if (! $transaction) {
+                return $this->json_response('error', 'Not Found', 'Transaction not found', 404);
+            }
+
             $transaction->delete();
 
             return $this->json_response('success', 'Transaction Deleted', 'Transaction deleted successfully', 200);
-        } catch (ModelNotFoundException $e) {
-            return $this->json_response('error', 'Not Found', 'Transaction not found', 404);
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }

@@ -101,13 +101,14 @@ class RidesController extends Controller
     public function destroy($id)
     {
         try {
-            $ride = Ride::findOrFail($id);
-            $ride->deleted_by = Auth::id();
-            $ride->save();
+            $ride = Ride::find($id);
+            if (! $ride) {
+                return $this->json_response('error', 'Not Found', 'Ride not found', 404);
+            }
+
             $ride->delete();
+
             return $this->json_response('success', 'Ride Deleted', 'Ride deleted successfully', 200);
-        } catch (ModelNotFoundException $e) {
-            return $this->json_response('error', 'Not Found', 'Ride not found', 404);
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }

@@ -45,6 +45,15 @@ class Ride extends Model
         'deleted_by',
     ];
 
+    protected $hidden = [
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function driver()
     {
         return $this->belongsTo(Account::class, 'driver_id');
