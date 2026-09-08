@@ -134,13 +134,13 @@ class DriversController extends Controller
     public function destroy($id)
     {
         try {
-            $account = Account::findOrFail($id);
-            $account->deleted_by = Auth::id();
-            $account->save();
+            $account = Account::find($id);
+            if (! $account) {
+                return $this->json_response('error', 'Not Found', 'Driver not found', 404);
+            }
+
             $account->delete();
             return $this->json_response('success', 'Driver Deleted', 'Driver deleted successfully', 200);
-        } catch (ModelNotFoundException $e) {
-            return $this->json_response('error', 'Not Found', 'Driver not found', 404);
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }

@@ -117,9 +117,10 @@ class CarsController extends Controller
     public function destroy($id)
     {
         try {
-            $car = Car::findOrFail($id);
-            $car->deleted_by = Auth::id();
-            $car->save();
+            $car = Car::find($id);
+            if (! $car) {
+                return $this->json_response('error', 'Not Found', 'Car not found', 404);
+            }
 
             // Delete image
             if ($car->image && Storage::disk('public')->exists($car->image)) {
@@ -127,12 +128,9 @@ class CarsController extends Controller
             }
 
             $car->delete();
-            return $this->json_response('success','Car Deleted','Car deleted successfully',200);
-        } catch (ModelNotFoundException $e) {
-            return $this->json_response('error','Not Found','Car not found',404);
-
+            return $this->json_response('success', 'Car Deleted', 'Car deleted successfully', 200);
         } catch (\Throwable $e) {
-            return $this->json_response('error','Something went wrong',['message' => $e->getMessage(),'line' => $e->getLine(),'file' => $e->getFile()],500);
+            return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
     }
 }

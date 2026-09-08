@@ -3,6 +3,7 @@
 use App\Http\Controllers\Apis\AuthenticationController;
 use App\Http\Controllers\Apis\CarsController;
 use App\Http\Controllers\Apis\DriversController;
+use App\Http\Controllers\Apis\ExpensesController;
 use App\Http\Controllers\Apis\RidesController;
 use App\Http\Controllers\Apis\TransactionsController;
 use Illuminate\Support\Facades\Artisan;
@@ -54,4 +55,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions/{id}', [TransactionsController::class, 'show']);
     Route::put('/transactions/{id}', [TransactionsController::class, 'update']);
     Route::delete('/transactions/{id}', [TransactionsController::class, 'destroy']);
+
+    // Expenses
+    Route::get('/expenses', [ExpensesController::class, 'index']);
+    Route::post('/expenses', [ExpensesController::class, 'store']);
+    Route::get('/expenses/{id}', [ExpensesController::class, 'show']);
+    Route::put('/expenses/{id}', [ExpensesController::class, 'update']);
+    Route::delete('/expenses/{id}', [ExpensesController::class, 'destroy']);
 });
