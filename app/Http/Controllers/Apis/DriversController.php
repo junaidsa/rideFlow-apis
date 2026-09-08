@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Apis;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\Car;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class DriversController extends Controller
@@ -30,6 +32,8 @@ class DriversController extends Controller
                 'car_id' => 'required|exists:cars,id',
                 'commission' => 'nullable|numeric|between:0,100',
                 'name' => 'required|min:2',
+                'username' => 'required|min:3|unique:users,username',
+                'password' => 'required|min:6',
                 'phone' => 'nullable',
                 'father_phone' => 'nullable',
                 'cnic' => 'nullable',
@@ -55,6 +59,15 @@ class DriversController extends Controller
                 'account_type' => $request->account_type,
                 'address' => $request->address,
                 'created_by' => Auth::id(),
+            ]);
+
+            // Insert into users table
+            $user = User::create([
+                'group_id' => Auth::user()->group_id,
+                'name' => $request->name,
+                'username' => $request->username,
+                'email' => $request->username . '@rideflow.com',
+                'password' => Hash::make($request->password),
             ]);
 
             return $this->json_response('success', 'Driver Created', 'Driver created successfully', 200, $account->toArray());
