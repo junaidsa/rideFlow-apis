@@ -32,7 +32,6 @@ class DriversController extends Controller
                 'car_id' => 'required|exists:cars,id',
                 'commission' => 'nullable|numeric|between:0,100',
                 'name' => 'required|min:2',
-                'username' => 'required|min:3|unique:users,username',
                 'password' => 'required|min:6',
                 'phone' => 'nullable',
                 'father_phone' => 'nullable',
@@ -65,8 +64,8 @@ class DriversController extends Controller
             $user = User::create([
                 'group_id' => Auth::user()->group_id,
                 'name' => $request->name,
-                'username' => $request->username,
-                'email' => $request->username . '@rideflow.com',
+                'username' => $request->phone,
+                'email' => $request->name . '@rideflow.com',
                 'password' => Hash::make($request->password),
             ]);
 

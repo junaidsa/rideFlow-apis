@@ -43,6 +43,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     /**
@@ -57,4 +63,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
 }
