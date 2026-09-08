@@ -30,7 +30,7 @@ class AuthenticationController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->save();
-            return $this->json_response('success', 'Register', 'User Register Successfully', 200, $user->toArray());
+            return $this->json_response('success', 'Register', 'User Register Successfully', 200, $user );
         } catch (\Exception $e) {
             return $this->json_response('error', 'Register Failed', 'Something went wrong: ' . $e->getMessage(), 500);
         }
@@ -50,7 +50,7 @@ class AuthenticationController extends Controller
             if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
                 $user = User::find($user = Auth::id());
                 $token = $user->createToken('token')->plainTextToken;
-                return $this->json_response('success', 'Login', 'Login Account Successfully', 200, $user->toArray(), $token);
+                return $this->json_response('success', 'Login', 'Login Account Successfully', 200, $user , $token);
             } else {
                     return $this->json_response('error', 'Validation failed', 'Either Username/Password is incorrect', 401);
             }

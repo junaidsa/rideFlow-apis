@@ -16,7 +16,7 @@ class RidesController extends Controller
         try {
             $rides = Ride::with(['driver', 'car'])->get();
 
-            return $this->json_response('success', 'Rides', 'Rides fetched successfully', 200, $rides->toArray());
+            return $this->json_response('success', 'Rides', 'Rides fetched successfully', 200, $rides );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -47,7 +47,7 @@ class RidesController extends Controller
                 'created_by' => Auth::id(),
             ]);
 
-            return $this->json_response('success', 'Ride Created', 'Ride created successfully', 200, $ride->toArray());
+            return $this->json_response('success', 'Ride Created', 'Ride created successfully', 200, $ride );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -58,7 +58,7 @@ class RidesController extends Controller
         try {
             $ride = Ride::with(['driver', 'car'])->findOrFail($id);
 
-            return $this->json_response('success', 'Ride', 'Ride fetched successfully', 200, $ride->toArray());
+            return $this->json_response('success', 'Ride', 'Ride fetched successfully', 200, $ride );
         } catch (ModelNotFoundException $e) {
             return $this->json_response('error', 'Not Found', 'Ride not found', 404);
         } catch (\Throwable $e) {
@@ -92,7 +92,7 @@ class RidesController extends Controller
             $ride->date = $request->date ? strtotime($request->date) : $ride->date;
             $ride->save();
 
-            return $this->json_response('success', 'Ride Updated', 'Ride updated successfully', 200, $ride->toArray());
+            return $this->json_response('success', 'Ride Updated', 'Ride updated successfully', 200, $ride );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }

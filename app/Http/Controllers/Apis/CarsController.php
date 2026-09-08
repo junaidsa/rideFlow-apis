@@ -17,7 +17,7 @@ class CarsController extends Controller
         try {
             $cars = Car::get();
 
-            return $this->json_response('success', 'Cars', 'Cars fetched successfully', 200, $cars->toArray());
+            return $this->json_response('success', 'Cars', 'Cars fetched successfully', 200, $cars );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -54,7 +54,7 @@ class CarsController extends Controller
                 'created_by' => Auth::id(),
             ]);
 
-            return $this->json_response('success', 'Car Created', 'Car created successfully', 200, $car->toArray());
+            return $this->json_response('success', 'Car Created', 'Car created successfully', 200, $car );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -65,7 +65,7 @@ class CarsController extends Controller
         try {
             $car = Car::findOrFail($id);
 
-            return $this->json_response('success', 'Car', 'Car fetched successfully', 200, $car->toArray());
+            return $this->json_response('success', 'Car', 'Car fetched successfully', 200, $car );
         } catch (ModelNotFoundException $e) {
             return $this->json_response('error', 'Not Found', 'Car not found', 404);
         } catch (\Throwable $e) {
@@ -108,7 +108,7 @@ class CarsController extends Controller
 
             $car->save();
 
-            return $this->json_response('success', 'Car Updated', 'Car updated successfully', 200, $car->toArray());
+            return $this->json_response('success', 'Car Updated', 'Car updated successfully', 200, $car );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }

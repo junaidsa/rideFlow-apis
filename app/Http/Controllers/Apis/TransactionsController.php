@@ -27,7 +27,7 @@ class TransactionsController extends Controller
         try {
             $transactions = Transaction::with(['ride', 'account'])->get();
 
-            return $this->json_response('success', 'Transactions', 'Transactions fetched successfully', 200, $transactions->toArray());
+            return $this->json_response('success', 'Transactions', 'Transactions fetched successfully', 200, $transactions );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -64,7 +64,7 @@ class TransactionsController extends Controller
                 'created_by' => Auth::id(),
             ]);
 
-            return $this->json_response('success', 'Transaction Created', 'Transaction created successfully', 200, $transaction->toArray());
+            return $this->json_response('success', 'Transaction Created', 'Transaction created successfully', 200, $transaction );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -75,7 +75,7 @@ class TransactionsController extends Controller
         try {
             $transaction = Transaction::with(['ride', 'account'])->findOrFail($id);
 
-            return $this->json_response('success', 'Transaction', 'Transaction fetched successfully', 200, $transaction->toArray());
+            return $this->json_response('success', 'Transaction', 'Transaction fetched successfully', 200, $transaction );
         } catch (ModelNotFoundException $e) {
             return $this->json_response('error', 'Not Found', 'Transaction not found', 404);
         } catch (\Throwable $e) {
@@ -115,7 +115,7 @@ class TransactionsController extends Controller
             $transaction->is_reconcile = $request->is_reconcile ?? $transaction->is_reconcile;
             $transaction->save();
 
-            return $this->json_response('success', 'Transaction Updated', 'Transaction updated successfully', 200, $transaction->toArray());
+            return $this->json_response('success', 'Transaction Updated', 'Transaction updated successfully', 200, $transaction );
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }

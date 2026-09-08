@@ -19,7 +19,7 @@ class DriversController extends Controller
         try {
             $accounts = Account::get();
 
-            return $this->json_response('success', 'Drivers', 'Drivers fetched successfully', 200, $accounts->toArray());
+            return $this->json_response('success', 'Drivers', 'Drivers fetched successfully', 200, $accounts);
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -69,7 +69,7 @@ class DriversController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            return $this->json_response('success', 'Driver Created', 'Driver created successfully', 200, $account->toArray());
+            return $this->json_response('success', 'Driver Created', 'Driver created successfully', 200, $account);
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
@@ -80,7 +80,7 @@ class DriversController extends Controller
         try {
             $account = Account::findOrFail($id);
 
-            return $this->json_response('success', 'Driver', 'Driver fetched successfully', 200, $account->toArray());
+            return $this->json_response('success', 'Driver', 'Driver fetched successfully', 200, $account);
         } catch (ModelNotFoundException $e) {
             return $this->json_response('error', 'Not Found', 'Driver not found', 404);
         } catch (\Throwable $e) {
@@ -124,7 +124,7 @@ class DriversController extends Controller
             $account->address = $request->address ?? $account->address;
             $account->save();
 
-            return $this->json_response('success', 'Driver Updated', 'Driver updated successfully', 200, $account->toArray());
+            return $this->json_response('success', 'Driver Updated', 'Driver updated successfully', 200, $account);
         } catch (\Throwable $e) {
             return $this->json_response('error', 'Something went wrong', ['message' => $e->getMessage(), 'line' => $e->getLine(), 'file' => $e->getFile()], 500);
         }
