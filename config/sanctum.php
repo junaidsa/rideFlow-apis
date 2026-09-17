@@ -51,6 +51,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Access Token Expiration
+    |--------------------------------------------------------------------------
+    |
+    | This value controls the lifetime of the API access token issued on
+    | login. Once it expires, the user must log in again to get a new
+    | token. Value is in minutes (1440 = 24 hours).
+    |
+    */
+
+    'access_token_expiration' => env('SANCTUM_ACCESS_TOKEN_EXPIRATION', 1440),
+    
+    /*
+    |--------------------------------------------------------------------------
     | Token Prefix
     |--------------------------------------------------------------------------
     |
