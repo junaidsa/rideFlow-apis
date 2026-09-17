@@ -27,6 +27,9 @@ Route::get('/refresh', function () {
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
 
+    // Authentication
+    Route::post('/logout', [AuthenticationController::class, 'logout']);
+
     // Cars
     Route::get('/cars', [CarsController::class, 'index']);
     Route::post('/cars', [CarsController::class, 'store']);
