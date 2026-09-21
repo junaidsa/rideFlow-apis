@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Apis\AuthenticationController;
 use App\Http\Controllers\Apis\CarsController;
+use App\Http\Controllers\Apis\DriverRatingsController;
 use App\Http\Controllers\Apis\DriversController;
 use App\Http\Controllers\Apis\ExpensesController;
 use App\Http\Controllers\Apis\RidesController;
@@ -65,4 +66,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/expenses/{id}', [ExpensesController::class, 'show']);
     Route::put('/expenses/{id}', [ExpensesController::class, 'update']);
     Route::delete('/expenses/{id}', [ExpensesController::class, 'destroy']);
+
+    // Driver Ratings (rating add hone ke baad change nahi hoti — no update route)
+    Route::get('/driver-ratings', [DriverRatingsController::class, 'index']);
+    Route::post('/driver-ratings', [DriverRatingsController::class, 'store']);
+    Route::get('/driver-ratings/{id}', [DriverRatingsController::class, 'show']);
+    Route::delete('/driver-ratings/{id}', [DriverRatingsController::class, 'destroy']);
+    Route::get('/drivers/{id}/ratings-summary', [DriverRatingsController::class, 'driverSummary']);
 });
