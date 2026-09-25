@@ -6,7 +6,8 @@ return [
     | The wildcard origin is suitable for development; use the deployed
     | frontend origin(s) in production.
     */
-    'paths' => ['api/*'],
+    // Include both normal Laravel URLs and installations served below /rideflow.
+    'paths' => ['api/*', 'rideflow/api/*'],
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
